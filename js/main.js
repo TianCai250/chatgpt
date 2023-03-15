@@ -90,6 +90,7 @@ new Vue({
                     this.$refs.bottomEmpty.scrollIntoView({
                         behavior: 'smooth',
                     });
+                    this.question = '';
                 });
         },
         resetMsg() {
