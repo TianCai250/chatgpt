@@ -1,0 +1,142 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+}
+
+.question {
+    width: 80%;
+    margin-right: 5px;
+}
+
+.btns {
+    display: flex;
+}
+
+.container {
+    padding: 5px;
+    flex: 1;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.answer-card {
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.el-card__body {
+    overflow-y: auto;
+    height: calc(100% - 58px);
+}
+
+.msg-box {
+    min-height: 100%;
+    background-color: #ededed;
+}
+
+.el-card__body,
+.el-main {
+    padding: 0;
+}
+
+.msg {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 5px;
+}
+
+.msg-item {
+    display: flex;
+}
+
+.msg_person .msg-item {
+    flex-direction: row-reverse;
+}
+
+.msg_ai .msg-item {
+    justify-content: flex-start;
+}
+
+.msg-head {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+.msg_person .msg-head {
+    background: rgb(87, 210, 248);
+    color: #fff;
+    margin-left: 10px;
+}
+
+.msg_ai .msg-head {
+    background: rgb(101, 248, 87);
+    color: #fff;
+    margin-right: 10px;
+}
+
+.msg-content {
+    max-width: 70%;
+    min-width: 10%;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.msg_person .msg-content {
+    background-color: #dcf8c7;
+}
+
+.msg_ai .msg-content {
+    background-color: #fff;
+}
+
+.el-message {
+    min-width: 300px;
+}
+
+.el-loading-mask {
+    border-radius: 8px;
+}
+
+.el-loading-spinner .circular {
+    width: 30px;
+    height: 30px;
+}
+
+.el-loading-spinner {
+    margin-top: -15px;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #c6c7c9;
+}
+
+@media only screen and (max-width: 1080px) {
+    .question {
+        width: 100%;
+    }
+
+    .btns {
+        margin-top: 5px;
+    }
+}
