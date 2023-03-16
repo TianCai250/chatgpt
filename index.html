@@ -12,6 +12,7 @@
     <script src="./js/vue.min.js"></script>
     <script src="./js/elementui.js"></script>
     <script src="./js/axios.min.js"></script>
+    <script src="./js/dom-to-image.js"></script>
 </head>
 
 <body>
@@ -31,9 +32,10 @@
             <el-card class="answer-card" shadow="never">
                 <div slot="header" class="clearfix">
                     <span>消息记录</span>
-                    <el-button style="float: right; padding: 3px 0" type="text" @click="clearMsgRecord">清空</el-button>
+                    <el-button style="float: right; padding: 3px 5px" type="text" @click="clearMsgRecord">清空</el-button>
+                    <el-button style="float: right; padding: 3px 5px" type="text" @click="captureImg">截图</el-button>
                 </div>
-                <div class="msg-box">
+                <div class="msg-box" ref="msgBox">
                     <div v-for="item in msgList" :key="item.id"
                         :class="['msg',item.from=='person'?'msg_person':'msg_ai']">
                         <div class="msg-item">

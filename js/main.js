@@ -40,7 +40,7 @@ new Vue({
                 behavior: 'smooth',
             });
             // 关闭连续对话
-            if(!this.continueTalk) {
+            if (!this.continueTalk) {
                 this.currentParentId = '';
             }
             if (this.currentParentId) {
@@ -98,11 +98,50 @@ new Vue({
                     this.question = '';
                 });
         },
+        // 重置对话
         resetMsg() {
             this.currentParentId = '';
         },
+        // 清空消息记录
         clearMsgRecord() {
             this.msgList = [];
+        },
+        // 截图保存
+        captureImg() {
+            if (this.msgList.length == 0) {
+                this.$message({
+                    type: 'warning',
+                    message: '消息记录为空',
+                });
+                return;
+            }
+            const that = this;
+            domtoimage
+                .toPng(that.$refs.msgBox)
+                .then(function (dataUrl) {
+                    console.log(dataUrl);
+                    var blob = new Blob([''], { type: 'application/octet-stream' });
+                    var url = URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = dataUrl;
+                    a.download = dataUrl.replace(/(.*\/)*([^.]+.*)/gi, '$2').split('?')[0];
+
+                    var e = new MouseEvent('click', (true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null));
+                    a.dispatchEvent(e);
+                    URL.revokeObjectURL(url);
+
+                    that.$message({
+                        type: 'success',
+                        message: '截图已保存',
+                    });
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    that.$message({
+                        type: 'danger',
+                        message: error,
+                    });
+                });
         },
     },
 });
