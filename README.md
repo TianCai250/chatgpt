@@ -1,3 +1,5 @@
 # chatgpt
-## 一个chatgpt聊天的demo网页
-https://tiancai250.github.io/chatgpt/
+
+## 一个 chatgpt 聊天的 demo 网页
+
+http://tiancai250.top/
