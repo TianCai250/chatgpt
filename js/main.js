@@ -132,15 +132,17 @@ new Vue({
                 });
                 return;
             }
+            const loading = ELEMENT.Loading.service({ fullscreen: true });
             const that = this;
             domtoimage
-                .toPng(that.$refs.msgBox)
+                .toJpeg(that.$refs.msgBox)
                 .then(function (dataUrl) {
-                    console.log(dataUrl);
+                    loading.close();
                     that.captureUrl = dataUrl;
                     that.captureShow = true;
                 })
                 .catch(function (error) {
+                    loading.close();
                     that.$message({
                         type: 'error',
                         message: error,
