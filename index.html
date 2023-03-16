@@ -18,7 +18,8 @@
 <body>
     <div id="app">
         <div class="header">
-            <el-input class="question" v-model="question" placeholder="请输入消息内容" clearable></el-input>
+            <el-input class="question" v-model="question" placeholder="请输入消息内容" clearable :disabled="lockBtn"
+                @keyup.enter.native="sendMsg"></el-input>
             <div class="btns">
                 <el-button @click="sendMsg" type="primary" :disabled="lockBtn" plain>发送消息</el-button>
                 <el-button @click="resetMsg" type="info" :disabled="lockBtn" plain>重置对话</el-button>
@@ -51,7 +52,7 @@
         <div class="screen-capture-container" v-if="captureShow">
             <div class="capture-box">
                 <i class="el-icon-close" @click="closeCapture"></i>
-                <el-image style="max-height: 80vh" :src="captureUrl" fit="contain"></el-image>
+                <el-image style="width: 95%;max-height: 80vh" :src="captureUrl" fit="contain"></el-image>
             </div>
         </div>
     </div>

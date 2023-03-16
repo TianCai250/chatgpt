@@ -63,32 +63,47 @@ new Vue({
                 })
                 .then(res => {
                     if (res.data) {
-                        if (res.data.code == 204) {
-                            this.msgList[this.msgList.length - 1] = {
-                                id: this.currentParentId,
-                                from: 'ai',
-                                content: '每日免费50次，免费次数已用完',
-                                loading: false,
-                            };
-                            this.$message({
-                                type: 'error',
-                                message: '每日免费50次，免费次数已用完',
-                                duration: 2000,
-                            });
-                            return;
+                        switch (res.data.code) {
+                            case -1:
+                                this.msgList[this.msgList.length - 1] = {
+                                    id: this.currentParentId,
+                                    from: 'ai',
+                                    content: '系统升级中，请耐心等待',
+                                    loading: false,
+                                };
+                                this.$message({
+                                    type: 'error',
+                                    message: '系统升级中，请耐心等待',
+                                    duration: 2000,
+                                });
+                                break;
+                            case 204:
+                                this.msgList[this.msgList.length - 1] = {
+                                    id: this.currentParentId,
+                                    from: 'ai',
+                                    content: '每日免费50次，免费次数已用完',
+                                    loading: false,
+                                };
+                                this.$message({
+                                    type: 'error',
+                                    message: '每日免费50次，免费次数已用完',
+                                    duration: 2000,
+                                });
+                                break;
+                            default:
+                                let result = '';
+                                if (res.data.id) {
+                                    result = res.data.text;
+                                    this.currentParentId = res.data.id;
+                                } else {
+                                    let arr = res.data.split('\n');
+                                    result = JSON.parse(arr[arr.length - 1]).text;
+                                    this.currentParentId = JSON.parse(arr[arr.length - 1]).id;
+                                }
+                                this.msgList[this.msgList.length - 1].id = this.currentParentId;
+                                this.msgList[this.msgList.length - 1].content = result;
+                                this.msgList[this.msgList.length - 1].loading = false;
                         }
-                        let result = '';
-                        if (res.data.id) {
-                            result = res.data.text;
-                            this.currentParentId = res.data.id;
-                        } else {
-                            let arr = res.data.split('\n');
-                            result = JSON.parse(arr[arr.length - 1]).text;
-                            this.currentParentId = JSON.parse(arr[arr.length - 1]).id;
-                        }
-                        this.msgList[this.msgList.length - 1].id = this.currentParentId;
-                        this.msgList[this.msgList.length - 1].content = result;
-                        this.msgList[this.msgList.length - 1].loading = false;
                     }
                 })
                 .catch(err => {
@@ -134,8 +149,9 @@ new Vue({
             }
             const loading = ELEMENT.Loading.service({ fullscreen: true });
             const that = this;
+            console.log(that.$refs.msgBox.offsetWidth);
             domtoimage
-                .toJpeg(that.$refs.msgBox)
+                .toPng(that.$refs.msgBox)
                 .then(function (dataUrl) {
                     loading.close();
                     that.captureUrl = dataUrl;

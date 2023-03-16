@@ -15,7 +15,6 @@
     padding: 5px;
 }
 
-
 .question {
     width: 65%;
     margin-right: 5px;
@@ -149,7 +148,11 @@
     justify-content: center;
     align-items: center;
 }
-
+.capture-box {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
 .capture-box .el-icon-close {
     position: absolute;
     right: 10px;
