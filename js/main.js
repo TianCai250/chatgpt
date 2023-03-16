@@ -10,6 +10,10 @@ new Vue({
             continueTalk: true,
             captureShow: false,
             captureUrl: '',
+            codeMap: {
+                '-1': '系统升级中，请耐心等待',
+                204: '每日免费50次，免费次数已用完',
+            },
         };
     },
     methods: {
@@ -65,28 +69,16 @@ new Vue({
                     if (res.data) {
                         switch (res.data.code) {
                             case -1:
-                                this.msgList[this.msgList.length - 1] = {
-                                    id: this.currentParentId,
-                                    from: 'ai',
-                                    content: '系统升级中，请耐心等待',
-                                    loading: false,
-                                };
-                                this.$message({
-                                    type: 'error',
-                                    message: '系统升级中，请耐心等待',
-                                    duration: 2000,
-                                });
-                                break;
                             case 204:
                                 this.msgList[this.msgList.length - 1] = {
                                     id: this.currentParentId,
                                     from: 'ai',
-                                    content: '每日免费50次，免费次数已用完',
+                                    content: this.codeMap[res.data.code],
                                     loading: false,
                                 };
                                 this.$message({
                                     type: 'error',
-                                    message: '每日免费50次，免费次数已用完',
+                                    message: this.codeMap[res.data.code],
                                     duration: 2000,
                                 });
                                 break;
