@@ -11,7 +11,7 @@
         // Default is to fail on error, no placeholder
         imagePlaceholder: undefined,
         // Default cache bust is false, it will use the cache
-        cacheBust: false
+        cacheBust: false,
     };
 
     var domtoimage = {
@@ -25,15 +25,12 @@
             images: images,
             util: util,
             inliner: inliner,
-            options: {}
-        }
+            options: {},
+        },
     };
 
-    if (typeof module !== 'undefined')
-        module.exports = domtoimage;
-    else
-        global.domtoimage = domtoimage;
-
+    if (typeof module !== 'undefined') module.exports = domtoimage;
+    else global.domtoimage = domtoimage;
 
     /**
      * @param {Node} node - The DOM Node object to render
@@ -61,10 +58,7 @@
             .then(inlineImages)
             .then(applyOptions)
             .then(function (clone) {
-                return makeSvgDataUri(clone,
-                    options.width || util.width(node),
-                    options.height || util.height(node)
-                );
+                return makeSvgDataUri(clone, options.width || util.width(node), options.height || util.height(node));
             });
 
         function applyOptions(clone) {
@@ -88,15 +82,9 @@
      * @return {Promise} - A promise that is fulfilled with a Uint8Array containing RGBA pixel data.
      * */
     function toPixelData(node, options) {
-        return draw(node, options || {})
-            .then(function (canvas) {
-                return canvas.getContext('2d').getImageData(
-                    0,
-                    0,
-                    util.width(node),
-                    util.height(node)
-                ).data;
-            });
+        return draw(node, options || {}).then(function (canvas) {
+            return canvas.getContext('2d').getImageData(0, 0, util.width(node), util.height(node)).data;
+        });
     }
 
     /**
@@ -105,10 +93,9 @@
      * @return {Promise} - A promise that is fulfilled with a PNG image data URL
      * */
     function toPng(node, options) {
-        return draw(node, options || {})
-            .then(function (canvas) {
-                return canvas.toDataURL();
-            });
+        return draw(node, options || {}).then(function (canvas) {
+            return canvas.toDataURL();
+        });
     }
 
     /**
@@ -118,10 +105,9 @@
      * */
     function toJpeg(node, options) {
         options = options || {};
-        return draw(node, options)
-            .then(function (canvas) {
-                return canvas.toDataURL('image/jpeg', options.quality || 1.0);
-            });
+        return draw(node, options).then(function (canvas) {
+            return canvas.toDataURL('image/jpeg', options.quality || 1.0);
+        });
     }
 
     /**
@@ -130,19 +116,18 @@
      * @return {Promise} - A promise that is fulfilled with a PNG image blob
      * */
     function toBlob(node, options) {
-        return draw(node, options || {})
-            .then(util.canvasToBlob);
+        return draw(node, options || {}).then(util.canvasToBlob);
     }
 
     function copyOptions(options) {
         // Copy options to impl options for use in impl
-        if(typeof(options.imagePlaceholder) === 'undefined') {
+        if (typeof options.imagePlaceholder === 'undefined') {
             domtoimage.impl.options.imagePlaceholder = defaultOptions.imagePlaceholder;
         } else {
             domtoimage.impl.options.imagePlaceholder = options.imagePlaceholder;
         }
 
-        if(typeof(options.cacheBust) === 'undefined') {
+        if (typeof options.cacheBust === 'undefined') {
             domtoimage.impl.options.cacheBust = defaultOptions.cacheBust;
         } else {
             domtoimage.impl.options.cacheBust = options.cacheBust;
@@ -161,11 +146,16 @@
 
         function newCanvas(domNode) {
             var canvas = document.createElement('canvas');
-            canvas.width = options.width || util.width(domNode);
-            canvas.height = options.height || util.height(domNode);
-
+            var ctx = canvas.getContext('2d');
+            ctx.mozImageSmoothingEnabled = false;
+            ctx.webkitImageSmoothingEnabled = false;
+            ctx.msImageSmoothingEnabled = false;
+            ctx.imageSmoothingEnabled = false;
+            var scale = options.scale || 1; // 默认值1
+            canvas.width = options.width * scale || util.width(domNode);
+            canvas.height = options.height * scale || util.height(domNode);
+            ctx.scale(scale, scale); // 添加了scale参数
             if (options.bgcolor) {
-                var ctx = canvas.getContext('2d');
                 ctx.fillStyle = options.bgcolor;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
@@ -195,10 +185,9 @@
             var children = original.childNodes;
             if (children.length === 0) return Promise.resolve(clone);
 
-            return cloneChildrenInOrder(clone, util.asArray(children), filter)
-                .then(function () {
-                    return clone;
-                });
+            return cloneChildrenInOrder(clone, util.asArray(children), filter).then(function () {
+                return clone;
+            });
 
             function cloneChildrenInOrder(parent, children, filter) {
                 var done = Promise.resolve();
@@ -236,11 +225,7 @@
 
                     function copyProperties(source, target) {
                         util.asArray(source).forEach(function (name) {
-                            target.setProperty(
-                                name,
-                                source.getPropertyValue(name),
-                                source.getPropertyPriority(name)
-                            );
+                            target.setProperty(name, source.getPropertyValue(name), source.getPropertyPriority(name));
                         });
                     }
                 }
@@ -274,15 +259,10 @@
                         }
 
                         function formatCssProperties(style) {
-
-                            return util.asArray(style)
-                                .map(formatProperty)
-                                .join('; ') + ';';
+                            return util.asArray(style).map(formatProperty).join('; ') + ';';
 
                             function formatProperty(name) {
-                                return name + ': ' +
-                                    style.getPropertyValue(name) +
-                                    (style.getPropertyPriority(name) ? ' !important' : '');
+                                return name + ': ' + style.getPropertyValue(name) + (style.getPropertyPriority(name) ? ' !important' : '');
                             }
                         }
                     }
@@ -291,7 +271,7 @@
 
             function copyUserInput() {
                 if (original instanceof HTMLTextAreaElement) clone.innerHTML = original.value;
-                if (original instanceof HTMLInputElement) clone.setAttribute("value", original.value);
+                if (original instanceof HTMLInputElement) clone.setAttribute('value', original.value);
             }
 
             function fixSvg() {
@@ -310,20 +290,18 @@
     }
 
     function embedFonts(node) {
-        return fontFaces.resolveAll()
-            .then(function (cssText) {
-                var styleNode = document.createElement('style');
-                node.appendChild(styleNode);
-                styleNode.appendChild(document.createTextNode(cssText));
-                return node;
-            });
+        return fontFaces.resolveAll().then(function (cssText) {
+            var styleNode = document.createElement('style');
+            node.appendChild(styleNode);
+            styleNode.appendChild(document.createTextNode(cssText));
+            return node;
+        });
     }
 
     function inlineImages(node) {
-        return images.inlineAll(node)
-            .then(function () {
-                return node;
-            });
+        return images.inlineAll(node).then(function () {
+            return node;
+        });
     }
 
     function makeSvgDataUri(node, width, height) {
@@ -337,8 +315,7 @@
                 return '<foreignObject x="0" y="0" width="100%" height="100%">' + xhtml + '</foreignObject>';
             })
             .then(function (foreignObject) {
-                return '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '">' +
-                    foreignObject + '</svg>';
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '">' + foreignObject + '</svg>';
             })
             .then(function (svg) {
                 return 'data:image/svg+xml;charset=utf-8,' + svg;
@@ -361,7 +338,7 @@
             escapeXhtml: escapeXhtml,
             makeImage: makeImage,
             width: width,
-            height: height
+            height: height,
         };
 
         function mimes() {
@@ -373,16 +350,16 @@
             var JPEG = 'image/jpeg';
 
             return {
-                'woff': WOFF,
-                'woff2': WOFF,
-                'ttf': 'application/font-truetype',
-                'eot': 'application/vnd.ms-fontobject',
-                'png': 'image/png',
-                'jpg': JPEG,
-                'jpeg': JPEG,
-                'gif': 'image/gif',
-                'tiff': 'image/tiff',
-                'svg': 'image/svg+xml'
+                woff: WOFF,
+                woff2: WOFF,
+                ttf: 'application/font-truetype',
+                eot: 'application/vnd.ms-fontobject',
+                png: 'image/png',
+                jpg: JPEG,
+                jpeg: JPEG,
+                gif: 'image/gif',
+                tiff: 'image/tiff',
+                svg: 'image/svg+xml',
             };
         }
 
@@ -407,12 +384,13 @@
                 var length = binaryString.length;
                 var binaryArray = new Uint8Array(length);
 
-                for (var i = 0; i < length; i++)
-                    binaryArray[i] = binaryString.charCodeAt(i);
+                for (var i = 0; i < length; i++) binaryArray[i] = binaryString.charCodeAt(i);
 
-                resolve(new Blob([binaryArray], {
-                    type: 'image/png'
-                }));
+                resolve(
+                    new Blob([binaryArray], {
+                        type: 'image/png',
+                    }),
+                );
             });
         }
 
@@ -444,7 +422,7 @@
 
                 function fourRandomChars() {
                     /* see http://stackoverflow.com/a/6248722/2519373 */
-                    return ('0000' + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
+                    return ('0000' + ((Math.random() * Math.pow(36, 4)) << 0).toString(36)).slice(-4);
                 }
             };
         }
@@ -462,10 +440,10 @@
 
         function getAndEncode(url) {
             var TIMEOUT = 30000;
-            if(domtoimage.impl.options.cacheBust) {
+            if (domtoimage.impl.options.cacheBust) {
                 // Cache bypass so we dont have CORS issues with cached images
                 // Source: https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest#Bypassing_the_cache
-                url += ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime();
+                url += (/\?/.test(url) ? '&' : '?') + new Date().getTime();
             }
 
             return new Promise(function (resolve) {
@@ -479,9 +457,9 @@
                 request.send();
 
                 var placeholder;
-                if(domtoimage.impl.options.imagePlaceholder) {
+                if (domtoimage.impl.options.imagePlaceholder) {
                     var split = domtoimage.impl.options.imagePlaceholder.split(/,/);
-                    if(split && split[1]) {
+                    if (split && split[1]) {
                         placeholder = split[1];
                     }
                 }
@@ -490,7 +468,7 @@
                     if (request.readyState !== 4) return;
 
                     if (request.status !== 200) {
-                        if(placeholder) {
+                        if (placeholder) {
                             resolve(placeholder);
                         } else {
                             fail('cannot fetch resource: ' + url + ', status: ' + request.status);
@@ -508,7 +486,7 @@
                 }
 
                 function timeout() {
-                    if(placeholder) {
+                    if (placeholder) {
                         resolve(placeholder);
                     } else {
                         fail('timeout of ' + TIMEOUT + 'ms occured while fetching resource: ' + url);
@@ -577,8 +555,8 @@
             shouldProcess: shouldProcess,
             impl: {
                 readUrls: readUrls,
-                inline: inline
-            }
+                inline: inline,
+            },
         };
 
         function shouldProcess(string) {
@@ -639,8 +617,8 @@
         return {
             resolveAll: resolveAll,
             impl: {
-                readAll: readAll
-            }
+                readAll: readAll,
+            },
         };
 
         function resolveAll() {
@@ -649,7 +627,7 @@
                     return Promise.all(
                         webFonts.map(function (webFont) {
                             return webFont.resolve();
-                        })
+                        }),
                     );
                 })
                 .then(function (cssStrings) {
@@ -695,7 +673,7 @@
                     },
                     src: function () {
                         return webFontRule.style.getPropertyValue('src');
-                    }
+                    },
                 };
             }
         }
@@ -705,13 +683,13 @@
         return {
             inlineAll: inlineAll,
             impl: {
-                newImage: newImage
-            }
+                newImage: newImage,
+            },
         };
 
         function newImage(element) {
             return {
-                inline: inline
+                inline: inline,
             };
 
             function inline(get) {
@@ -735,30 +713,25 @@
         function inlineAll(node) {
             if (!(node instanceof Element)) return Promise.resolve(node);
 
-            return inlineBackground(node)
-                .then(function () {
-                    if (node instanceof HTMLImageElement)
-                        return newImage(node).inline();
-                    else
-                        return Promise.all(
-                            util.asArray(node.childNodes).map(function (child) {
-                                return inlineAll(child);
-                            })
-                        );
-                });
+            return inlineBackground(node).then(function () {
+                if (node instanceof HTMLImageElement) return newImage(node).inline();
+                else
+                    return Promise.all(
+                        util.asArray(node.childNodes).map(function (child) {
+                            return inlineAll(child);
+                        }),
+                    );
+            });
 
             function inlineBackground(node) {
                 var background = node.style.getPropertyValue('background');
 
                 if (!background) return Promise.resolve(node);
 
-                return inliner.inlineAll(background)
+                return inliner
+                    .inlineAll(background)
                     .then(function (inlined) {
-                        node.style.setProperty(
-                            'background',
-                            inlined,
-                            node.style.getPropertyPriority('background')
-                        );
+                        node.style.setProperty('background', inlined, node.style.getPropertyPriority('background'));
                     })
                     .then(function () {
                         return node;
