@@ -16,12 +16,19 @@
 }
 
 .question {
-    width: 80%;
+    width: 65%;
     margin-right: 5px;
 }
 
 .btns {
     display: flex;
+    align-items: center;
+}
+
+.btns .switch-label {
+    margin: 0 10px;
+    color: #303133;
+    font-size: 14px;
 }
 
 .container {

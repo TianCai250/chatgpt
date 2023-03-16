@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>AI chatgpt</title>
     <link rel="stylesheet" href="./css/elementui.css">
     <link rel="stylesheet" href="./css/index.css">
@@ -20,6 +21,9 @@
             <div class="btns">
                 <el-button @click="sendMsg" type="primary" :disabled="lockBtn" plain>发送消息</el-button>
                 <el-button @click="resetMsg" type="info" :disabled="lockBtn" plain>重置对话</el-button>
+                <span class="switch-label">连续对话</span>
+                <el-switch v-model="continueTalk" active-color="#13ce66" :disabled="lockBtn">
+                </el-switch>
             </div>
 
         </div>

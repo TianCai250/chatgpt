@@ -7,6 +7,7 @@ new Vue({
             lockBtn: false,
             currentParentId: '',
             options: {},
+            continueTalk: true,
         };
     },
     methods: {
@@ -38,6 +39,10 @@ new Vue({
             this.$refs.bottomEmpty.scrollIntoView({
                 behavior: 'smooth',
             });
+            // 关闭连续对话
+            if(!this.continueTalk) {
+                this.currentParentId = '';
+            }
             if (this.currentParentId) {
                 this.options = {
                     parentMessageId: this.currentParentId,
