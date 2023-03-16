@@ -139,6 +139,26 @@
     background-color: #c6c7c9;
 }
 
+.screen-capture-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99;
+    background-color: #00000088;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.capture-box .el-icon-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #fff;
+    font-size: 36px;
+    cursor: pointer;
+}
+
 @media only screen and (max-width: 1080px) {
     .question {
         width: 100%;

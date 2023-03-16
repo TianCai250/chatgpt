@@ -8,6 +8,8 @@ new Vue({
             currentParentId: '',
             options: {},
             continueTalk: true,
+            captureShow: false,
+            captureUrl: '',
         };
     },
     methods: {
@@ -61,6 +63,20 @@ new Vue({
                 })
                 .then(res => {
                     if (res.data) {
+                        if (res.data.code == 204) {
+                            this.msgList[this.msgList.length - 1] = {
+                                id: this.currentParentId,
+                                from: 'ai',
+                                content: '每日免费50次，免费次数已用完',
+                                loading: false,
+                            };
+                            this.$message({
+                                type: 'error',
+                                message: '每日免费50次，免费次数已用完',
+                                duration: 2000,
+                            });
+                            return;
+                        }
                         let result = '';
                         if (res.data.id) {
                             result = res.data.text;
@@ -84,7 +100,7 @@ new Vue({
                         loading: false,
                     };
                     this.$message({
-                        type: 'danger',
+                        type: 'error',
                         message: err,
                         duration: 2000,
                     });
@@ -112,6 +128,7 @@ new Vue({
                 this.$message({
                     type: 'warning',
                     message: '消息记录为空',
+                    duration: 2000,
                 });
                 return;
             }
@@ -120,28 +137,21 @@ new Vue({
                 .toPng(that.$refs.msgBox)
                 .then(function (dataUrl) {
                     console.log(dataUrl);
-                    var blob = new Blob([''], { type: 'application/octet-stream' });
-                    var url = URL.createObjectURL(blob);
-                    var a = document.createElement('a');
-                    a.href = dataUrl;
-                    a.download = dataUrl.replace(/(.*\/)*([^.]+.*)/gi, '$2').split('?')[0];
-
-                    var e = new MouseEvent('click', (true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null));
-                    a.dispatchEvent(e);
-                    URL.revokeObjectURL(url);
-
-                    that.$message({
-                        type: 'success',
-                        message: '截图已保存',
-                    });
+                    that.captureUrl = dataUrl;
+                    that.captureShow = true;
                 })
                 .catch(function (error) {
-                    console.error(error);
                     that.$message({
-                        type: 'danger',
+                        type: 'error',
                         message: error,
+                        duration: 2000,
                     });
                 });
+        },
+        // 关闭截图保存
+        closeCapture() {
+            this.captureShow = false;
+            this.captureUrl = '';
         },
     },
 });

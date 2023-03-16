@@ -48,7 +48,12 @@
 
             </el-card>
         </div>
-
+        <div class="screen-capture-container" v-if="captureShow">
+            <div class="capture-box">
+                <i class="el-icon-close" @click="closeCapture"></i>
+                <el-image style="max-height: 80vh" :src="captureUrl" fit="contain"></el-image>
+            </div>
+        </div>
     </div>
 
 
