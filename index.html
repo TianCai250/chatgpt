@@ -19,7 +19,7 @@
     <div id="app">
         <div class="header">
             <el-input class="question" v-model="question" placeholder="请输入消息内容" clearable :disabled="lockBtn"
-                @keyup.enter.native="sendMsg"></el-input>
+                maxlength="50" show-word-limit @keyup.enter.native="sendMsg"></el-input>
             <div class="btns">
                 <el-button @click="sendMsg" type="primary" :disabled="lockBtn" plain>发送消息</el-button>
                 <el-button @click="resetMsg" type="info" :disabled="lockBtn" plain>重置对话</el-button>
