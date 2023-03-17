@@ -68,28 +68,16 @@ new Vue({
                     if (res.data) {
                         switch (res.data.code) {
                             case -1:
-                                this.msgList[this.msgList.length - 1] = {
-                                    id: this.currentParentId,
-                                    from: 'ai',
-                                    content: res.data.msg,
-                                    loading: false,
-                                };
-                                this.$message({
-                                    type: 'error',
-                                    message: res.data.msg,
-                                    duration: 2000,
-                                });
-                                break;
                             case 204:
                                 this.msgList[this.msgList.length - 1] = {
                                     id: this.currentParentId,
                                     from: 'ai',
-                                    content: this.codeMap[res.data.code],
+                                    content: this.codeMap[res.data.code] || res.data.msg,
                                     loading: false,
                                 };
                                 this.$message({
                                     type: 'error',
-                                    message: this.codeMap[res.data.code],
+                                    message: this.codeMap[res.data.code] || res.data.msg,
                                     duration: 2000,
                                 });
                                 break;
