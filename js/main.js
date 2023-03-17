@@ -11,7 +11,6 @@ new Vue({
             captureShow: false,
             captureUrl: '',
             codeMap: {
-                '-1': '系统升级中，请耐心等待',
                 204: '每日免费50次，免费次数已用完',
             },
         };
@@ -69,6 +68,18 @@ new Vue({
                     if (res.data) {
                         switch (res.data.code) {
                             case -1:
+                                this.msgList[this.msgList.length - 1] = {
+                                    id: this.currentParentId,
+                                    from: 'ai',
+                                    content: res.data.msg,
+                                    loading: false,
+                                };
+                                this.$message({
+                                    type: 'error',
+                                    message: res.data.msg,
+                                    duration: 2000,
+                                });
+                                break;
                             case 204:
                                 this.msgList[this.msgList.length - 1] = {
                                     id: this.currentParentId,
