@@ -201,9 +201,9 @@ new Vue({
         // 模式初始化
         initMode() {
             const theme = localStorage.getItem('chatgpt-theme');
-            console.log(theme);
             if (theme !== null && theme !== undefined) {
-                this.changeMode(theme);
+                this.setting.mode = JSON.parse(theme);
+                this.changeMode(JSON.parse(theme));
             }
         },
         // 模式切换
