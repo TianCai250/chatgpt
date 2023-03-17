@@ -13,7 +13,39 @@ new Vue({
             codeMap: {
                 204: '每日免费50次，免费次数已用完',
             },
+            settingShow: false,
+            setting: {
+                mode: false,
+            },
+            themes: {
+                false: {
+                    '--msgbox-bg': '#ededed',
+                    '--common-bg': '#ffffff',
+                    '--common-color': '#303133',
+                    '--common-border': '1px solid #EBEEF5',
+                    '--btn-bg': '#ffffff',
+                    '--person-msg-bg': '#dcf8c7',
+                },
+                true: {
+                    '--msgbox-bg': '#1c1c1c',
+                    '--common-bg': '#0d0d0d',
+                    '--common-color': '#8f9091',
+                    '--common-border': '1px solid #797777',
+                    '--btn-bg': '#1c1c1c',
+                    '--person-msg-bg': '#0d0d0d',
+                },
+            },
         };
+    },
+    watch: {
+        'setting.mode': {
+            handler: function (val) {
+                this.changeMode(val);
+            },
+        },
+    },
+    created() {
+        this.initMode();
     },
     methods: {
         sendMsg() {
@@ -161,6 +193,27 @@ new Vue({
         closeCapture() {
             this.captureShow = false;
             this.captureUrl = '';
+        },
+        // 开启设置面板
+        editSetting() {
+            this.settingShow = true;
+        },
+        // 模式初始化
+        initMode() {
+            const theme = localStorage.getItem('chatgpt-theme');
+            console.log(theme);
+            if (theme !== null && theme !== undefined) {
+                this.changeMode(theme);
+            }
+        },
+        // 模式切换
+        changeMode(type) {
+            const keys = Object.keys(this.themes[type]);
+            const values = Object.values(this.themes[type]);
+            for (let i = 0; i < keys.length; i++) {
+                document.documentElement.style.setProperty(keys[i], values[i]);
+            }
+            localStorage.setItem('chatgpt-theme', type);
         },
     },
 });

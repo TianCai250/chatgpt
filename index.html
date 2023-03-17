@@ -33,8 +33,13 @@
             <el-card class="answer-card" shadow="never">
                 <div slot="header" class="clearfix">
                     <span>消息记录</span>
-                    <el-button style="float: right; padding: 3px 5px" type="text" @click="clearMsgRecord">清空</el-button>
-                    <el-button style="float: right; padding: 3px 5px" type="text" @click="captureImg">截图</el-button>
+                    <div class="card-btns">
+                        <el-button style="padding: 3px 0;" type="text" @click="editSetting">设置
+                        </el-button>
+                        </el-button>
+                        <el-button style="padding: 3px 0;" type="text" @click="captureImg">截图</el-button>
+                        <el-button style="padding: 3px 0;" type="text" @click="clearMsgRecord">清空
+                    </div>
                 </div>
                 <div class="msg-box" ref="msgBox">
                     <div v-for="item in msgList" :key="item.id"
@@ -55,6 +60,13 @@
                 <el-image style="width: 95%;max-height: 80vh" :src="captureUrl" fit="contain"></el-image>
             </div>
         </div>
+        <el-drawer title="设置" :visible.sync="settingShow" direction="ltr">
+            <div class="setting-item">
+                <el-switch v-model="setting.mode" active-text="黑夜模式" inactive-text="白天模式">
+                </el-switch>
+            </div>
+
+        </el-drawer>
     </div>
 
 

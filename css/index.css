@@ -1,3 +1,12 @@
+:root {
+    --msgbox-bg: #ededed;
+    --common-bg: #ffffff;
+    --common-color: #303133;
+    --common-border: 1px solid #ebeef5;
+    --btn-bg: #ffffff;
+    --person-msg-bg: #dcf8c7;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -7,6 +16,29 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-color: var(--common-bg);
+    color: var(--common-color);
+}
+
+.el-input input {
+    background-color: var(--common-bg);
+    border: var(--common-border);
+    color: var(--common-color);
+}
+.el-input .el-input__count .el-input__count-inner {
+    background-color: var(--common-bg);
+}
+.el-button--primary.is-plain,
+.el-button--info.is-plain {
+    background-color: var(--btn-bg);
+    border: var(--common-border);
+}
+.el-drawer {
+    background-color: var(--common-bg);
+    border-right: var(--common-border);
+}
+.el-switch__label {
+    color: var(--common-color);
 }
 
 .header {
@@ -27,7 +59,6 @@
 
 .btns .switch-label {
     margin: 0 10px;
-    color: #303133;
     font-size: 14px;
 }
 
@@ -42,16 +73,32 @@
     height: 100%;
     box-sizing: border-box;
     overflow: hidden;
+    border: var(--common-border);
 }
 
 .el-card__body {
     overflow-y: auto;
     height: calc(100% - 58px);
 }
+.el-card__header {
+    background-color: var(--common-bg);
+    color: var(--common-color);
+    border-bottom: var(--common-border);
+}
+
+.el-card .clearfix {
+    display: flex;
+    justify-content: space-between;
+    aligin-items: center;
+}
+
+.card-btns {
+    height: 22px;
+}
 
 .msg-box {
     min-height: 100%;
-    background-color: #ededed;
+    background-color: var(--msgbox-bg);
 }
 
 .el-card__body,
@@ -106,11 +153,13 @@
 }
 
 .msg_person .msg-content {
-    background-color: #dcf8c7;
+    background-color: var(--person-msg-bg);
+    color: var(--common-color);
 }
 
 .msg_ai .msg-content {
-    background-color: #fff;
+    background-color: var(--common-bg);
+    color: var(--common-color);
 }
 
 .el-message {
@@ -162,6 +211,15 @@
     cursor: pointer;
 }
 
+.el-drawer {
+    width: 400px !important;
+}
+
+.setting-item {
+    width: 100%;
+    padding: 15px 10px;
+}
+
 @media only screen and (max-width: 1080px) {
     .question {
         width: 100%;
@@ -169,5 +227,10 @@
 
     .btns {
         margin-top: 5px;
+    }
+}
+@media only screen and (max-width: 750px) {
+    .el-drawer {
+        width: 70% !important;
     }
 }
