@@ -2,74 +2,18 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>AI chatgpt</title>
-    <link rel="stylesheet" href="./css/elementui.css">
-    <link rel="stylesheet" href="./css/index.css">
-    <script src="./js/vue.min.js"></script>
-    <script src="./js/elementui.js"></script>
-    <script src="./js/axios.min.js"></script>
-    <script src="./js/dom-to-image.js"></script>
-
+  <script type="module" crossorigin src="/assets/index.17161925.js"></script>
+  <link rel="stylesheet" href="/assets/index.fe887778.css">
 </head>
 
 <body>
-    <div id="app">
-        <div class="header">
-            <el-input class="question" v-model="question" placeholder="请输入消息内容" clearable :disabled="lockBtn"
-                maxlength="50" show-word-limit @keyup.enter.native="sendMsg"></el-input>
-            <div class="btns">
-                <el-button @click="sendMsg" type="primary" :disabled="lockBtn" plain>发送消息</el-button>
-                <!-- <el-button @click="resetMsg" type="info" :disabled="lockBtn" plain>重置对话</el-button>
-                <span class="switch-label">连续对话</span>
-                <el-switch v-model="continueTalk" active-color="#13ce66" :disabled="lockBtn">
-                </el-switch> -->
-            </div>
-
-        </div>
-        <div class="container">
-            <el-card class="answer-card" shadow="never">
-                <div slot="header" class="clearfix">
-                    <span>消息记录</span>
-                    <div class="card-btns">
-                        <el-button style="padding: 3px 0;" type="text" @click="editSetting">设置
-                        </el-button>
-                        </el-button>
-                        <el-button style="padding: 3px 0;" type="text" @click="captureImg">截图</el-button>
-                        <el-button style="padding: 3px 0;" type="text" @click="clearMsgRecord">清空
-                    </div>
-                </div>
-                <div class="msg-box" ref="msgBox">
-                    <div v-for="item in msgList" :class="['msg',item.from=='person'?'msg_person':'msg_ai']">
-                        <div class="msg-item">
-                            <div class="msg-head">{{item.from=='person'?'我':'AI'}}</div>
-                            <div class="msg-content" v-loading="item.loading">{{item.content}}</div>
-                        </div>
-                    </div>
-                    <div ref="bottomEmpty" class="bottom-empty"></div>
-                </div>
-
-            </el-card>
-        </div>
-        <div class="screen-capture-container" v-if="captureShow">
-            <div class="capture-box">
-                <i class="el-icon-close" @click="closeCapture"></i>
-                <el-image style="width: 95%;max-height: 80vh" :src="captureUrl" fit="contain"></el-image>
-            </div>
-        </div>
-        <el-drawer title="设置" :visible.sync="settingShow" direction="ltr">
-            <div class="setting-item">
-                <el-switch v-model="setting.mode" active-text="黑夜模式" inactive-text="白天模式">
-                </el-switch>
-            </div>
-
-        </el-drawer>
-    </div>
-
-    <script src="./js/main.js"></script>
+    <div id="app"></div>
+    
 </body>
 
 </html>
