@@ -2,11 +2,11 @@ new Vue({
     el: '#app',
     data: function () {
         return {
+            key: '',
             question: '',
             msgList: [],
             lockBtn: false,
             currentParentId: '',
-            options: {},
             continueTalk: true,
             captureShow: false,
             captureUrl: '',
@@ -45,6 +45,7 @@ new Vue({
         },
     },
     created() {
+        this.getKey();
         this.initMode();
     },
     methods: {
@@ -61,14 +62,12 @@ new Vue({
             this.lockBtn = true;
 
             this.msgList.push({
-                id: 'person:' + new Date().getTime(),
                 from: 'person',
                 content: this.question,
                 loading: false,
             });
 
             this.msgList.push({
-                id: 'ai:' + new Date().getTime(),
                 from: 'ai',
                 content: '',
                 loading: true,
@@ -76,63 +75,26 @@ new Vue({
             this.$refs.bottomEmpty.scrollIntoView({
                 behavior: 'smooth',
             });
-            // 关闭连续对话
-            if (!this.continueTalk) {
-                this.currentParentId = '';
-            }
-            if (this.currentParentId) {
-                this.options = {
-                    parentMessageId: this.currentParentId,
-                };
-            } else {
-                this.options = {};
-            }
 
             this.getGptMsg();
         },
+        getKey() {
+            this.key = new Date().getTime();
+        },
         getGptMsg() {
             axios
-                .post('http://43.154.144.239:3002/api/chat-process', {
-                    options: this.options,
+                .post('https://cbjtestapi.binjie.site:7777/api/generateStream', {
+                    network: true,
                     prompt: this.question,
+                    userId: `#/chat/${this.key}`,
                 })
                 .then(res => {
-                    if (res.data) {
-                        switch (res.data.code) {
-                            case -1:
-                            case 204:
-                                this.msgList[this.msgList.length - 1] = {
-                                    id: this.currentParentId,
-                                    from: 'ai',
-                                    content: this.codeMap[res.data.code] || res.data.msg,
-                                    loading: false,
-                                };
-                                this.$message({
-                                    type: 'error',
-                                    message: this.codeMap[res.data.code] || res.data.msg,
-                                    duration: 2000,
-                                });
-                                break;
-                            default:
-                                let result = '';
-                                if (res.data.id) {
-                                    result = res.data.text;
-                                    this.currentParentId = res.data.id;
-                                } else {
-                                    let arr = res.data.split('\n');
-                                    result = JSON.parse(arr[arr.length - 1]).text;
-                                    this.currentParentId = JSON.parse(arr[arr.length - 1]).id;
-                                }
-                                this.msgList[this.msgList.length - 1].id = this.currentParentId;
-                                this.msgList[this.msgList.length - 1].content = result;
-                                this.msgList[this.msgList.length - 1].loading = false;
-                        }
-                    }
+                    this.msgList[this.msgList.length - 1].content = res.data;
+                    this.msgList[this.msgList.length - 1].loading = false;
                 })
                 .catch(err => {
                     console.log(err);
                     this.msgList[this.msgList.length - 1] = {
-                        id: this.currentParentId,
                         from: 'ai',
                         content: err,
                         loading: false,
@@ -172,7 +134,6 @@ new Vue({
             }
             const loading = ELEMENT.Loading.service({ fullscreen: true });
             const that = this;
-            console.log(that.$refs.msgBox.offsetWidth);
             domtoimage
                 .toPng(that.$refs.msgBox)
                 .then(function (dataUrl) {

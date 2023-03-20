@@ -13,6 +13,7 @@
     <script src="./js/elementui.js"></script>
     <script src="./js/axios.min.js"></script>
     <script src="./js/dom-to-image.js"></script>
+
 </head>
 
 <body>
@@ -22,10 +23,10 @@
                 maxlength="50" show-word-limit @keyup.enter.native="sendMsg"></el-input>
             <div class="btns">
                 <el-button @click="sendMsg" type="primary" :disabled="lockBtn" plain>发送消息</el-button>
-                <el-button @click="resetMsg" type="info" :disabled="lockBtn" plain>重置对话</el-button>
+                <!-- <el-button @click="resetMsg" type="info" :disabled="lockBtn" plain>重置对话</el-button>
                 <span class="switch-label">连续对话</span>
                 <el-switch v-model="continueTalk" active-color="#13ce66" :disabled="lockBtn">
-                </el-switch>
+                </el-switch> -->
             </div>
 
         </div>
@@ -42,8 +43,7 @@
                     </div>
                 </div>
                 <div class="msg-box" ref="msgBox">
-                    <div v-for="item in msgList" :key="item.id"
-                        :class="['msg',item.from=='person'?'msg_person':'msg_ai']">
+                    <div v-for="item in msgList" :class="['msg',item.from=='person'?'msg_person':'msg_ai']">
                         <div class="msg-item">
                             <div class="msg-head">{{item.from=='person'?'我':'AI'}}</div>
                             <div class="msg-content" v-loading="item.loading">{{item.content}}</div>
@@ -68,8 +68,6 @@
 
         </el-drawer>
     </div>
-
-
 
     <script src="./js/main.js"></script>
 </body>
